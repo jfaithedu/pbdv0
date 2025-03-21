@@ -1,8 +1,8 @@
-import { createReadStream, promises as fs } from "fs"
-import path from "path"
 import { GitHubLink } from "@/settings/navigation"
+import { createReadStream, promises as fs } from "fs"
 import { Element, Text } from "hast"
 import { compileMDX } from "next-mdx-remote/rsc"
+import path from "path"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import rehypeCodeTitles from "rehype-code-titles"
 import rehypeKatex from "rehype-katex"
@@ -52,7 +52,7 @@ async function parseMdx<Frontmatter>(rawMdx: string) {
 
 const computeDocumentPath = (slug: string) => {
   return Settings.gitload
-    ? `${GitHubLink.href}/raw/main/contents/docs/${slug}/index.mdx`
+    ? `${GitHubLink.href}/contents/docs/${slug}/index.mdx`
     : path.join(process.cwd(), "/contents/docs/", `${slug}/index.mdx`)
 }
 
@@ -73,8 +73,12 @@ export async function getDocument(slug: string) {
     let lastUpdated: string | null = null
 
     if (Settings.gitload) {
+      console.log(
+        "fetching", contentPath)
       const response = await fetch(contentPath)
+      console.log(response)
       if (!response.ok) {
+        console.log("failed", contentPath)
         throw new Error(
           `Failed to fetch content from GitHub: ${response.statusText}`
         )
@@ -115,10 +119,12 @@ export async function getTable(
   let rawMdx = ""
 
   if (Settings.gitload) {
-    const contentPath = `${GitHubLink.href}/raw/main/contents/docs/${slug}/index.mdx`
+    const contentPath = `${GitHubLink.href}/contents/docs/${slug}/index.mdx`
     try {
       const response = await fetch(contentPath)
       if (!response.ok) {
+
+        console.log("failed", contentPath)
         throw new Error(
           `Failed to fetch content from GitHub: ${response.statusText}`
         )

@@ -13,5 +13,5 @@ export const Navigations = [
 ]
 
 export const GitHubLink = {
-  href: "https://github.com/jfaithedu/pbdv0",
+  href: "https://raw.githubusercontent.com/jfaithedu/pbdv0/master",
 }
